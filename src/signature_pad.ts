@@ -228,18 +228,19 @@ export default class SignaturePad {
   };
 
   private _handleTouchStart = (event: TouchEvent): void => {
-    // Prevent scrolling.
-    event.preventDefault();
-
     if (event.targetTouches.length === 1) {
+      // Prevent scrolling.
+      event.preventDefault();
       const touch = event.changedTouches[0];
       this._strokeBegin(touch);
     }
   };
 
   private _handleTouchMove = (event: TouchEvent): void => {
-    // Prevent scrolling.
-    event.preventDefault();
+    if (event.targetTouches.length === 1) {
+      // Prevent scrolling.
+      event.preventDefault();
+    }
 
     const touch = event.targetTouches[0];
     this._strokeMoveUpdate(touch);
@@ -248,7 +249,9 @@ export default class SignaturePad {
   private _handleTouchEnd = (event: TouchEvent): void => {
     const wasCanvasTouched = event.target === this.canvas;
     if (wasCanvasTouched) {
-      event.preventDefault();
+      if (event.changedTouches.length === 1) {
+        event.preventDefault();
+      }
 
       const touch = event.changedTouches[0];
       this._strokeEnd(touch);
